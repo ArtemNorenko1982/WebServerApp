@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "ConsoleApp2": {
+    "WebServerApp": {
       "commandName": "Project",
       "commandLineArgs": "8080\r\nc:\\Cashalot\\"
     }
