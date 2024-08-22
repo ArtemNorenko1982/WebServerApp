@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ConsoleApp2": {
+      "commandName": "Project",
+      "commandLineArgs": "8080\r\nc:\\Cashalot\\"
+    }
+  }
+}
