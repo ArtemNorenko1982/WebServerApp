@@ -23,7 +23,7 @@ namespace WebServer.Application.Services.Http
 
         public async Task HandleAsync(Socket socket)
         {
-            var socketMethod = DetermineSocketMethod(socket);
+            var socketMethod = await DetermineSocketMethodAsync(socket);
             await _logService.LogAsync($"\n*** incoming {socketMethod} request ***");
             
             await _requestHandler.ProceedAsync(socket);
@@ -31,7 +31,7 @@ namespace WebServer.Application.Services.Http
             socket.Close();
         }
 
-        private async Task<string> DetermineSocketMethod(Socket socket) => 
+        private async Task<string> DetermineSocketMethodAsync(Socket socket) => 
             (await _readService.ReadDataAsync(socket))
             .Split(AppValues.WhiteSpace)[0];
     }
