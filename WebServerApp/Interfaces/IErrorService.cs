@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace WebServerApp.Interfaces
+namespace WebServer.Application.Interfaces
 {
     internal interface IErrorService
     {

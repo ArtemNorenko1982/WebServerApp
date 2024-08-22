@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using WebServerApp.Interfaces;
+using WebServer.Application.Interfaces;
 
-namespace WebServerApp.Services
+namespace WebServer.Application.Services
 {
     internal class ErrorService : IErrorService
     {

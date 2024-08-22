@@ -1,84 +1,37 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Text;
+using System.Threading.Tasks;
+using WebServer.Application.Interfaces;
+using WebServer.Application.Interfaces.Http;
+using WebServer.Application.Services;
+using WebServer.Application.Services.Http;
 
-namespace WebServerApp
+namespace WebServer.Application
 {
     internal class WebServer
     {
         private readonly Socket _server;
-        private readonly ASCIIEncoding _encoding;
-        private readonly string _rootDirectory;
+        private readonly IHttpHandler _httpHandler;
 
         public WebServer(int port, string rootDirectory)
         {
-            _encoding = new ASCIIEncoding();
             _server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
             _server.Bind(new IPEndPoint(IPAddress.Loopback, port));
-            _rootDirectory = rootDirectory;
-            Console.WriteLine($"server is running on {_server.LocalEndPoint}");
+            
+            ILogService logService = new LogService();
+            _httpHandler = new HttpHandler(logService);
+            logService.LogAsync($"Server is running on {_server.LocalEndPoint}");
+            logService.LogAsync("To terminate the execution press \"ENTER\"");
         }
 
-        public void Start()
+        public async Task StartAsync()
         {
             _server.Listen(10);
             for (;;)
             {
-                var socket = _server.Accept();
-                HandleActiveSession(socket);
+                var socket = await _server.AcceptAsync();
+                await _httpHandler.HandleAsync(socket);
             }
-        }
-
-        private void HandleActiveSession(Socket socket)
-        {
-            Console.WriteLine("\n*** incoming request ***");
-            var socketMethod = ReadSocketData(socket);
-            Console.WriteLine(socketMethod);
-
-            string socketHeaders;
-
-            do
-            {
-                socketHeaders = ReadSocketData(socket);
-                if (!string.IsNullOrEmpty(socketHeaders))
-                {
-                    Console.WriteLine(socketHeaders);
-                }
-                
-            } while (!string.IsNullOrEmpty(socketHeaders));
-
-            WriteSocketData(socket, "HTTP/1.1 200 OK");
-            WriteSocketData(socket, "");
-            WriteSocketData(socket, "<html>");
-            WriteSocketData(socket, "<head><title>Sample WebServer</title></head>");
-            WriteSocketData(socket, "<body>");
-            WriteSocketData(socket, $"Success {DateTime.Now}");
-            WriteSocketData(socket, "</body>");
-
-            socket.Close();
-        }
-
-        private string ReadSocketData(Socket socket)
-        {
-            var result = new StringBuilder();
-            var buffer = new byte[1];
-            while (socket.Receive(buffer) > 0)
-            {
-                var symbol = (char)buffer[0];
-                if (symbol == '\n')
-                    break;
-                if (symbol != '\r')
-                    result.Append(symbol);
-            }
-
-            return result.ToString();
-        }
-
-        private void WriteSocketData(Socket server, string data)
-        {
-            server.Send(_encoding.GetBytes(data));
-            server.Send(_encoding.GetBytes("\r\n"));
         }
     }
 }

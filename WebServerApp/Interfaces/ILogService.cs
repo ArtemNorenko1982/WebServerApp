@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace WebServerApp.Interfaces
+namespace WebServer.Application.Interfaces
 {
     internal interface ILogService
     {
-        Task LogAsync();
+        Task LogAsync(string data);
     }
 }
