@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
-using WebServerApp.Interfaces;
+using WebServer.Application.Interfaces;
 
-namespace WebServerApp.Services
+namespace WebServer.Application.Services
 {
     internal class LogService : ILogService
     {
-        public async Task LogAsync()
+        public async Task LogAsync(string data)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(data);
         }
     }
 }

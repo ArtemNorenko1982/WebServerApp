@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using WebServerApp.Interfaces;
+using WebServer.Application.Interfaces;
 
-namespace WebServerApp.Services
+namespace WebWebServer.ApplicationServerApp.Services
 {
     internal class WriteService : IWriteService
     {

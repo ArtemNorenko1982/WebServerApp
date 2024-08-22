@@ -1,4 +1,7 @@
-﻿namespace WebServerApp
+﻿using System;
+using System.Threading.Tasks;
+
+namespace WebServer.Application
 {
     class Program
     {
@@ -8,8 +11,9 @@
             var rootDirectory = args[1];
 
             var server = new WebServer(port, rootDirectory);
-            
-            server.Start();
+
+            Task.Factory.StartNew(() => server.StartAsync());
+            Console.ReadLine();
         }
     }
 }
